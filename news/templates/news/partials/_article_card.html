@@ -1,0 +1,21 @@
+{# Reusable article card, included from the home page and the category list #}
+{% load static %}
+<article class="card">
+  {% if article.featured_image %}
+    <img src="{{ article.featured_image.url }}" alt="{{ article.title }}">
+  {% else %}
+    <img src="{% static 'img/placeholder.png' %}" alt="Sin imagen">
+  {% endif %}
+  <div class="card-body">
+    <h2><a href="{% url 'news:detail' article.pk %}">{{ article.title }}</a></h2>
+    <p class="meta">
+      {{ article.published_at|date:"d \d\e F \d\e Y" }} · {{ article.author.name }}
+    </p>
+    <p>{{ article.summary|truncatewords:25 }}</p>
+    <p class="tags">
+      {% for category in article.categories.all %}
+        <a href="{% url 'news:category' category.slug %}">{{ category.name }}</a>
+      {% endfor %}
+    </p>
+  </div>
+</article>

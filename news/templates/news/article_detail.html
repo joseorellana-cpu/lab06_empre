@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+  <article class="detail">
+    <h1>{{ article.title }}</h1>
+    <p class="meta">
+      Por {{ article.author.name }} · {{ article.published_at|date:"d/m/Y H:i" }}
+    </p>
+    {% if article.featured_image %}
+      <img class="hero" src="{{ article.featured_image.url }}" alt="{{ article.title }}">
+    {% endif %}
+    <p class="lead">{{ article.summary }}</p>
+    {# Auto-escaping is ON: HTML saved in the body is shown as text, not executed #}
+    <div class="body">{{ article.body|linebreaks }}</div>
+    <p class="tags">
+      Categorías:
+      {% for category in article.categories.all %}
+        <a href="{% url 'news:category' category.slug %}">{{ category.name }}</a>
+      {% endfor %}
+    </p>
+  </article>
+  <p><a href="{% url 'news:home' %}">&larr; Volver a la portada</a></p>
+{% endblock %}
+
+{% block sidebar %}
+  <h3>Sobre el autor</h3>
+  <p><strong>{{ article.author.name }}</strong></p>
+  <p>{{ article.author.bio|default:"Sin biografía." }}</p>
+  {{ block.super }}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Portal de Noticias{% endblock %} | Portal de Noticias</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{% url 'news:home' %}">
+      <img src="{% static 'img/logo.png' %}" alt="Logo" width="36" height="36">
+      Portal de Noticias
+    </a>
+    <nav>
+      <a href="{% url 'news:home' %}">Portada</a>
+      {% for category in sidebar_categories %}
+        <a href="{% url 'news:category' category.slug %}">{{ category.name }}</a>
+      {% endfor %}
+    </nav>
+  </header>
+
+  <div class="layout">
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <aside class="sidebar">
+      {% block sidebar %}
+        <h3>Categorías</h3>
+        <ul>
+          {% for category in sidebar_categories %}
+            <li><a href="{% url 'news:category' category.slug %}">{{ category.name }}</a></li>
+          {% empty %}
+            <li>Sin categorías.</li>
+          {% endfor %}
+        </ul>
+      {% endblock %}
+    </aside>
+  </div>
+
+  <footer class="site-footer">Laboratorio 06 · Motor de plantillas con Django</footer>
+</body>
+</html>
